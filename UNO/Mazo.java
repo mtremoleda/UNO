@@ -40,7 +40,8 @@ public class Mazo {
             while (!cartasPilo.isEmpty()) {
                 cartes.push(cartasPilo.pop());
             }
-            pilo.buidarPilo(ultimaCarta);
+            pilo.getPilo().clear();
+            pilo.getPilo().push(ultimaCarta);
             barrejar();
         }
     }

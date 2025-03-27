@@ -17,8 +17,4 @@ public class Pilo {
         pilo.push(c);
     }
 
-    public void buidarPilo(Carta ultimaCarta) {
-        pilo.clear();
-        pilo.push(ultimaCarta); // Deixa la ultima carta al pilo
-    }
 }
