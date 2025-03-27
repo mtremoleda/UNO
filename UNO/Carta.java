@@ -2,15 +2,22 @@ package UNO;
 
 public class Carta {
     public int numero;
-    public enum color{
+    public colors color;
+
+    public enum colors{
         Groc, Vermell, Blau, Verd
     }
 
-    public Carta(int numero){
+    public Carta(colors color, int numero){
         this.numero = numero;
+        this.color = color;
     }
 
     public int getNumero(){
         return numero;
+    }
+
+    public colors getColor(){
+        return color;
     }
 }
