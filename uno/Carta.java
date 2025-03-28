@@ -1,4 +1,4 @@
-package UNO;
+package uno;
 
 public class Carta {
     public int numero;

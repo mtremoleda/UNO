@@ -1,4 +1,6 @@
-package UNO;
+package uno;
+
+import uno.interficie.UI;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,9 +21,15 @@ public class Main {
         }
 
         System.out.println("Cartas del Jugador1");
-        for (Carta c : mazo.getCartes()){
-            j1.addCarta(c);
+        for (int i = 0; i < 7; i++){
+            j1.addCarta(mazo.afagarCarta());
         }
         UI.mostrarCartes(j1.getCartes());
+
+        System.out.println("Cartas del Mazo despres de repertir:");
+
+        for (int i = 0; i < mazo.getCartes().size(); i++) {
+            UI.mostrarCarta(mazo.getCartes().get(i));
+        }
     }
 }
