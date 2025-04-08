@@ -1,4 +1,4 @@
-package uno;
+package uno.logica;
 
 import java.util.Stack;
 
@@ -18,18 +18,13 @@ public class Pilo {
         cartes.push(carta);
     }
 
-    public Carta agafarCarta(Carta carta) {
-       return cartes.pop();
-    }
-
     public Carta consultarCarta(){
         return cartes.peek();
     }
 
-
-
-
-
+    public Carta agafarCarta(Carta carta) {
+       return cartes.pop();
+    }
 
 
 

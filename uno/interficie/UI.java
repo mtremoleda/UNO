@@ -1,6 +1,6 @@
 package uno.interficie;
 
-import uno.Carta;
+import uno.logica.Carta;
 
 import java.util.ArrayList;
 

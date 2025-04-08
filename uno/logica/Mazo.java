@@ -1,4 +1,4 @@
-package uno;
+package uno.logica;
 
 import java.util.Stack;
 import java.util.Collections;
@@ -11,13 +11,13 @@ public class Mazo {
         cartes = new Stack<>();
         cartesInicials = new Stack<>();
         int i, j;
-        for (i = 0; i < Carta.colors.values().length; i++) {
+        for (i = 0; i < Carta.Color.values().length; i++) {
             // Afageix nomes una carta del numero 0 de cada color
-            cartes.push(new Carta( Carta.colors.values()[i], 0));
+            cartes.push(new Carta( Carta.Color.values()[i], 0));
             // Fa dos cartes de cada color del numero 1 al numero 9
             for (j = 1; j <= 9; j++) {
-                cartes.push(new Carta(Carta.colors.values()[i] ,j));
-                cartes.push(new Carta(Carta.colors.values()[i], j));
+                cartes.push(new Carta(Carta.Color.values()[i] ,j));
+                cartes.push(new Carta(Carta.Color.values()[i], j));
             }
         }
     }
