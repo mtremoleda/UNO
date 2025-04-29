@@ -4,7 +4,7 @@ import java.util.Stack;
 
 
 public class Pilo {
-    private Stack<Carta> cartes;
+    public  Stack<Carta> cartes;
 
 
     public Pilo() {
@@ -22,10 +22,9 @@ public class Pilo {
         return cartes.peek();
     }
 
-    public Carta agafarCarta(Carta carta) {
-       return cartes.pop();
+    public Carta agafarCarta() {
+        return cartes.pop();
     }
-
 
 
 }

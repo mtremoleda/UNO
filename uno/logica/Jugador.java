@@ -22,19 +22,36 @@ public class Jugador {
     public ArrayList<Carta> getCartes(){
         return cartes;
     }
-    public void addCarta(Carta carta) {
-       cartes.add(carta);
-    }
-
-
     public void tirarCarta(Carta carta, Pilo pilo) {
         if (cartes.contains(carta)){
             cartes.remove(carta);
             pilo.addCarta(carta);
-            System.out.printf(nom + "ha tirat la carta");
+
             UI.mostrarCarta(carta);
-        } else {
-            System.out.println("no te aquesta carta");
         }
     }
+
+    public void robarCarta(Mazo mazo){
+        Carta cartaRobada = mazo.afagarCarta();
+        cartes.add(cartaRobada);
+    }
+
+    public int nombreDeCartes(){
+       return cartes.size();
+    }
+
+
+
+    public boolean potTirarCarta(Pilo pilo){
+        for (int i = 0; i < cartes.size(); i++){
+            Carta cartaJugador = cartes.get(i);
+            Carta cartaSuperior = pilo.consultarCarta();
+
+            if (Regles.sonCartesCompatibles(cartaJugador, cartaSuperior)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

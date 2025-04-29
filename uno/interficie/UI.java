@@ -71,6 +71,11 @@ public class UI {
             }
             System.out.println();
         }
+        System.out.print("   ");
+        for (int j = 0; j < quantitat; j++) {
+            System.out.printf("(%2s)         ", j);
+        }
+        System.out.println();
     }
 
 }

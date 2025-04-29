@@ -1,38 +1,113 @@
 package uno;
 
 import uno.interficie.UI;
-import uno.logica.Jugador;
-import uno.logica.Mazo;
-import uno.logica.Pilo;
+import uno.logica.*;
+import java.util.Scanner;
 
 public class Partida {
-    public static void jugar(String[] args) {
+    private Scanner scanner = new Scanner(System.in);
+    private OrdreJugador ordreJugadors = new OrdreJugador();
+    private Mazo mazo = new Mazo();
+    private Pilo pilo = new Pilo();
+    private boolean partidaAcabada = false;
 
-        Mazo mazo = new Mazo();
+    public void jugar() {
+        preparar();
+
+        while (!partidaAcabada) {
+            torn();
+        }
+    }
+
+    public void preparar() {
+        System.out.println("Quants jugadors participen? (entre dos i deu jugadors)");
+        int numJugadors = scanner.nextInt();
+        while (numJugadors < 2 || numJugadors > 10) {
+            System.out.println("Numero invalid. Introdueix un numero entre 2 i 10:");
+            numJugadors = scanner.nextInt();
+        }
+        scanner.nextLine();
+
+
+        for (int i = 1; i <= numJugadors; i++) {
+            System.out.println("Nom del jugador " + i + ":");
+            String nom = scanner.nextLine();
+            ordreJugadors.crearJugador(nom);
+        }
+
+        ordreJugadors.barrejarOrdre();
         mazo.barrejar();
 
 
-        Pilo pilo = new Pilo();
-
-        Jugador j1 = new Jugador("Jugador 1");
+        repartirCartes();
 
 
-        System.out.println("Cartas del Mazo:");
-
-        for (int i = 0; i < mazo.getCartes().size(); i++) {
-            UI.mostrarCarta(mazo.getCartes().get(i));
+        if (!ordreJugadors.jugadors.isEmpty()) {
+            ordreJugadors.passarTorn();
         }
 
-        System.out.println("Cartas del Jugador1");
-        for (int i = 0; i < 7; i++){
-            j1.addCarta(mazo.afagarCarta());
-        }
-        UI.mostrarCartes(j1.getCartes());
+        Carta primeraCarta = mazo.afagarCarta();
+        pilo.addCarta(primeraCarta);
 
-        System.out.println("Cartas del Mazo despres de repertir:");
+        System.out.println("Comença el joc!");
+        UI.mostrarCarta(primeraCarta);
+    }
 
-        for (int i = 0; i < mazo.getCartes().size(); i++) {
-            UI.mostrarCarta(mazo.getCartes().get(i));
+    public void repartirCartes() {
+
+        for (int i = 0; i < 7; i++) {
+            for (int x = 0; x < ordreJugadors.jugadors.size(); x++) {
+                ordreJugadors.jugadors.get(x).robarCarta(mazo);
+            }
         }
     }
+
+    public void torn() {
+
+        Jugador jugadorActual = ordreJugadors.getJugadorActiu();
+
+        if (jugadorActual == null) {
+            System.out.println("No hi ha jugador actiu");
+            partidaAcabada = true;
+            return;
+        }
+
+        System.out.println("Torn de: " + jugadorActual.getNom());
+        System.out.println("Carta al pilo:");
+        UI.mostrarCarta(pilo.consultarCarta());
+
+
+        if (jugadorActual.potTirarCarta(pilo)) {
+
+            UI.mostrarCartes(jugadorActual.getCartes());
+            System.out.println("Tria una carta per tirar (numero):");
+            int eleccio = scanner.nextInt();
+
+            if (eleccio >= 0 && eleccio < jugadorActual.getCartes().size()) {
+                Carta carta = jugadorActual.getCartes().get(eleccio);
+                if (Regles.sonCartesCompatibles(carta, pilo.consultarCarta())) {
+                    jugadorActual.tirarCarta(carta, pilo);
+                    System.out.println(jugadorActual.getNom() + " ha tirat una carta.");
+
+                    if (jugadorActual.nombreDeCartes() == 0) {
+                        System.out.println(jugadorActual.getNom() + " ha guanyat la partida!");
+                        partidaAcabada = true;
+                        return;
+                    }
+
+                } else {
+                    System.out.println("No pots tirar aquesta carta.");
+                }
+
+            } else {
+                System.out.println("Opcio no valida.");
+            }
+        } else {
+            System.out.println("No pots tirar cap carta. Robant una...");
+            jugadorActual.robarCarta(mazo);
+        }
+
+        ordreJugadors.passarTorn();
+    }
+
 }

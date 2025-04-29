@@ -4,8 +4,9 @@ import java.util.Stack;
 import java.util.Collections;
 
 public class Mazo {
-    private static Stack<Carta> cartes;
-    private static Stack<Carta> cartesInicials;
+    public  Stack<Carta> cartes;
+    public  Stack<Carta> cartesInicials;
+
 
     public Mazo() {
         cartes = new Stack<>();
@@ -48,6 +49,10 @@ public class Mazo {
 
     public void barrejar() {
         Collections.shuffle(cartes);
+    }
+
+    public boolean esBuit(){
+        return cartes.isEmpty();
     }
 
 
