@@ -9,18 +9,44 @@ public class Mazo {
 
 
     public Mazo() {
-        cartes = new Stack<>();
-        cartesInicials = new Stack<>();
-        int i, j;
-        for (i = 0; i < Carta.Color.values().length; i++) {
-            // Afageix nomes una carta del numero 0 de cada color
-            cartes.push(new Carta( Carta.Color.values()[i], 0));
-            // Fa dos cartes de cada color del numero 1 al numero 9
-            for (j = 1; j <= 9; j++) {
-                cartes.push(new Carta(Carta.Color.values()[i] ,j));
-                cartes.push(new Carta(Carta.Color.values()[i], j));
+        this.cartes = new Stack<>();
+        this.cartesInicials = new Stack<>();
+
+
+        // Cartes numèriques
+        Carta.Color[] colors = Carta.Color.values();
+        for (int i = 0; i < colors.length; i++) {
+            if (colors[i] != Carta.Color.Negre) {
+                // Una carta 0 per color
+                cartes.push(new CartaNumerica(colors[i], 0));
+
+                // Dues cartes del 1-9 per color
+                for (int j = 1; j <= 9; j++) {
+                    cartes.push(new CartaNumerica(colors[i], j));
+                    cartes.push(new CartaNumerica(colors[i], j));
+                }
+
+                // Cartes +2 per color (2 per color)
+                cartes.push(new CartaMesDos(colors[i]));
+                cartes.push(new CartaMesDos(colors[i]));
+
+                // Cartes prohibit per color (2 per color)
+                cartes.push(new CartaProhibit(colors[i]));
+                cartes.push(new CartaProhibit(colors[i]));
+
+                // Cartes canvi sentit per color (2 per color)
+                cartes.push(new CartaCanviSentit(colors[i]));
+                cartes.push(new CartaCanviSentit(colors[i]));
             }
         }
+
+        // Cartes especials negres (4 de cada)
+        for (int i = 0; i < 4; i++) {
+            cartes.push(new CartaCanviColor());
+            cartes.push(new CartaMesQuatre());
+        }
+
+        barrejar();
     }
 
 

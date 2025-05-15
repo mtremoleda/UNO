@@ -47,7 +47,7 @@ public class Jugador {
             Carta cartaJugador = cartes.get(i);
             Carta cartaSuperior = pilo.consultarCarta();
 
-            if (Regles.sonCartesCompatibles(cartaJugador, cartaSuperior)){
+            if (cartaJugador.sonCartesCompatibles(cartaSuperior)){
                 return true;
             }
         }

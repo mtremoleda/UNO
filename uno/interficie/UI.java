@@ -1,54 +1,101 @@
 package uno.interficie;
 
 import uno.logica.Carta;
-
 import java.util.ArrayList;
 
 public class UI {
-    // ANSI escape codes
+
     public static final String RESET = "\u001B[0m";
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
     public static final String YELLOW = "\u001B[33m";
     public static final String BLUE = "\u001B[34m";
+    public static final String BLACK = "\u001B[30m";
+    public static final String WHITE_BG = "\u001B[47m";
 
     private static String pintarCarta(Carta carta) {
-        String color = "";
+        String colorCode = "";
+        String topText = "";
+        String centerText = "  UNO   ";
+        String bottomText = "";
+
+
         switch (carta.getColor()) {
-            case carta.color.Groc:
-                color = YELLOW;
+            case Groc:
+                colorCode = YELLOW;
                 break;
-            case carta.color.Vermell:
-                color = RED;
+            case Vermell:
+                colorCode = RED;
                 break;
-            case carta.color.Blau:
-                color = BLUE;
+            case Blau:
+                colorCode = BLUE;
                 break;
-            case carta.color.Verd:
-                color = GREEN;
+            case Verd:
+                colorCode = GREEN;
+                break;
+            case Negre:
+                colorCode = BLACK + WHITE_BG;
                 break;
             default:
-                break;
+                colorCode = RESET;
         }
 
-        String cartaPintada = String.format("""
+
+        if (carta.getTipus() != null) {
+            switch (carta.getTipus()) {
+                case "MésDos":
+                    topText = "+2";
+                    centerText = "  +2   ";
+                    bottomText = "+2";
+                    break;
+                case "Prohibit":
+                    topText = " X";
+                    centerText = " PRO ";
+                    bottomText = " X";
+                    break;
+                case "CanviSentit":
+                    topText = " R";
+                    centerText = " REV ";
+                    bottomText = " R";
+                    break;
+                case "MésQuatre":
+                    topText = "+4";
+                    centerText = "  +4   ";
+                    bottomText = "+4";
+                    break;
+                case "CanviColor":
+                    topText = " C";
+                    centerText = " COL ";
+                    bottomText = " C";
+                    break;
+                default:
+                    topText = String.valueOf(carta.getNumero());
+                    centerText = "  UNO  ";
+                    bottomText = String.valueOf(carta.getNumero());
+            }
+        } else {
+
+            topText = String.valueOf(carta.getNumero());
+            centerText = " UNO ";
+            bottomText = String.valueOf(carta.getNumero());
+        }
+
+
+        return String.format("""
             %s┌─────────┐%s
-            %s│ %d       │%s
+            %s│ %-2s      │%s
             %s│         │%s
-            %s│   UNO   │%s
+            %s│ %-7s │%s
             %s│         │%s
-            %s│       %d │%s
+            %s│      %2s │%s
             %s└─────────┘%s""",
-                color, RESET,
-                color, carta.getNumero(), RESET,
-                color, RESET,
-                color, RESET,
-                color, RESET,
-                color, carta.getNumero(), RESET,
-                color, RESET);
-
-
-        return cartaPintada;
+                colorCode, RESET,
+                colorCode, topText, RESET,
+                colorCode, RESET,
+                colorCode, centerText, RESET,
+                colorCode, RESET,
+                colorCode, bottomText, RESET,
+                colorCode, RESET);
     }
 
     public static void mostrarCarta(Carta carta) {
@@ -73,9 +120,8 @@ public class UI {
         }
         System.out.print("   ");
         for (int j = 0; j < quantitat; j++) {
-            System.out.printf("(%2s)         ", j);
+            System.out.printf("(%2d)         ", j);
         }
         System.out.println();
     }
-
 }

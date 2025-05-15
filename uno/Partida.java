@@ -10,6 +10,7 @@ public class Partida {
     private Mazo mazo = new Mazo();
     private Pilo pilo = new Pilo();
     private boolean partidaAcabada = false;
+    private boolean sentitAntiHoriari = true; // true = horari, false = antihorari
 
     public void jugar() {
         preparar();
@@ -17,6 +18,15 @@ public class Partida {
         while (!partidaAcabada) {
             torn();
         }
+    }
+    public OrdreJugador getOrdreJugadors() {
+        return this.ordreJugadors;
+    }
+    public Mazo getMazo() {
+        return this.mazo;
+    }
+    public void canviarSentit() {
+        this.sentitAntiHoriari = !this.sentitAntiHoriari;
     }
 
     public void preparar() {
@@ -54,7 +64,6 @@ public class Partida {
     }
 
     public void repartirCartes() {
-
         for (int i = 0; i < 7; i++) {
             for (int x = 0; x < ordreJugadors.jugadors.size(); x++) {
                 ordreJugadors.jugadors.get(x).robarCarta(mazo);
@@ -62,8 +71,8 @@ public class Partida {
         }
     }
 
-    public void torn() {
 
+    public void torn() {
         Jugador jugadorActual = ordreJugadors.getJugadorActiu();
 
         if (jugadorActual == null) {
@@ -76,38 +85,57 @@ public class Partida {
         System.out.println("Carta al pilo:");
         UI.mostrarCarta(pilo.consultarCarta());
 
-
         if (jugadorActual.potTirarCarta(pilo)) {
-
             UI.mostrarCartes(jugadorActual.getCartes());
-            System.out.println("Tria una carta per tirar (numero):");
+            System.out.println("Tria una carta per tirar (numero) (robar carta = -1):");
             int eleccio = scanner.nextInt();
+
+            if (eleccio == -1) {
+                jugadorActual.robarCarta(mazo);
+                passarTornSegonsSentit();
+                return;
+            }
 
             if (eleccio >= 0 && eleccio < jugadorActual.getCartes().size()) {
                 Carta carta = jugadorActual.getCartes().get(eleccio);
-                if (Regles.sonCartesCompatibles(carta, pilo.consultarCarta())) {
+                if (carta.sonCartesCompatibles(pilo.consultarCarta())) {
                     jugadorActual.tirarCarta(carta, pilo);
                     System.out.println(jugadorActual.getNom() + " ha tirat una carta.");
+
+                    if (!carta.getTipus().equals("Numerica")) {
+                        carta.aplicarEfecte(this);
+                    } else {
+
+                        passarTornSegonsSentit();
+                    }
 
                     if (jugadorActual.nombreDeCartes() == 0) {
                         System.out.println(jugadorActual.getNom() + " ha guanyat la partida!");
                         partidaAcabada = true;
                         return;
                     }
-
                 } else {
-                    System.out.println("No pots tirar aquesta carta.");
+                    System.out.println("No pots tirar aquesta carta. Robant una...");
+                    jugadorActual.robarCarta(mazo);
+                    passarTornSegonsSentit();
                 }
-
             } else {
                 System.out.println("Opcio no valida.");
             }
         } else {
             System.out.println("No pots tirar cap carta. Robant una...");
             jugadorActual.robarCarta(mazo);
+            passarTornSegonsSentit();
         }
+    }
 
-        ordreJugadors.passarTorn();
+
+    private void passarTornSegonsSentit() {
+        if (sentitAntiHoriari) {
+            ordreJugadors.passarTorn();
+        } else {
+            ordreJugadors.passarTornInvers();
+        }
     }
 
 }

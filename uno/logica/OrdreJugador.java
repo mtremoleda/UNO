@@ -27,4 +27,18 @@ public class OrdreJugador {
         Collections.shuffle(jugadors);
     }
 
+    public void invertirOrdre() {
+        Collections.reverse(jugadors);
+        tornActual = jugadors.size() - 1 - tornActual;
+    }
+
+    public void passarTornInvers() {
+        if (tornActual == -1) {
+            tornActual = jugadors.size() - 1;
+        } else {
+            tornActual = (tornActual - 1 + jugadors.size()) % jugadors.size();
+        }
+    }
 }
+
+
